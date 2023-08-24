@@ -8,7 +8,6 @@ import re
 def setup_logging(name: str):
     """ Setup displaying logs in terminal and writing them into log files. """
 
-    # dir = Path(__file__).parent.parent.parent.parent
     log_filename = f"logs/{name}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setFormatter(logging.Formatter("%(message)s"))
@@ -18,39 +17,39 @@ def setup_logging(name: str):
 
 
 def extract_text_from_img(reader, image_path) -> str | None:
-    """ Extracts text from image and returns three words from the biggest areas on the image. """
+    """ Extract text from image and returns three words from the biggest areas on the image. """
 
     results = reader.readtext(image_path)
 
-    if results:
-        text_areas = []
-        for (bbox, text, confidence) in results:
-            # Calculate the area of the bounding box
-            x1, y1 = bbox[0]  # Top-left corner
-            x2, y2 = bbox[2]  # Bottom-right corner
-            area = (x2 - x1) * (y2 - y1)
-
-            text_areas.append((text, area))   # Append text and area to the list
-
-        # Sort the list by area in descending order
-        text_areas.sort(key=lambda x: x[1], reverse=True)
-
-        # Combine three biggest text areas into one string
-        num_areas_to_combine = min(3, len(text_areas))
-        new_name = " ".join(text_areas[i][0] for i in range(num_areas_to_combine))
-        return new_name
-    else:
+    if not results:
         return None
 
+    text_areas = []
+    for (bbox, text, confidence) in results:
+        # Calculate the area of the bounding box
+        x1, y1 = bbox[0]  # Top-left corner
+        x2, y2 = bbox[2]  # Bottom-right corner
+        area = (x2 - x1) * (y2 - y1)
 
-def sanitize_text(text):
+        text_areas.append((text, area))   # Append text and area to the list
+
+    # Sort the list by area in descending order
+    text_areas.sort(key=lambda x: x[1], reverse=True)
+
+    # Combine three biggest text areas into one string
+    num_areas_to_combine = min(3, len(text_areas))
+    new_name = " ".join(text_areas[i][0] for i in range(num_areas_to_combine))
+    return new_name
+
+
+def sanitize_text(text: str) -> str:
     """ Replace invalid characters. """
 
     return re.sub(r'[<>:"/\\|?*]', '', text)
 
 
 def get_image_files(folder_path) -> list:
-    """ Returns only image files from a given folder. """
+    """ Return only image files from a given folder. """
 
     all_files_in_folder = os.listdir(folder_path)
     image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']

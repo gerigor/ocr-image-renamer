@@ -7,9 +7,9 @@ name = "pypi"
 click = "*"
 easyocr = "*"
 pillow = "==9.5.0"
-pytest = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.10"

@@ -16,7 +16,7 @@ def main():
     pass
 
 
-@click.command(name='rename_images')
+@main.command(name='rename_images')
 @click.option(
     '--dir',
     type=str,
@@ -27,7 +27,7 @@ def main():
     '--lang',
     default='en',
     type=str,
-    prompt='Enter language codes (use comma-separated for multiple languages e.g. en,de), Hit enter for default',
+    prompt='Enter language codes (use comma-separated for multiple languages e.g. en,de). Hit enter for default',
     help='Languages on the image that need to be recognized.',
 )
 def rename_images(dir: str, lang: str):
@@ -51,32 +51,31 @@ def rename_images(dir: str, lang: str):
         extracted_raw_text = extract_text_from_img(reader, image_path)
         extracted_text = sanitize_text(extracted_raw_text)
 
-        if extracted_text:
-            new_image_name = f'{extracted_text}{extension}'
-            new_image_path = os.path.join(folder_path, new_image_name)
-
-            # Rename the file and handle FileExistsError
-            max_retries = 100
-            counter = 1
-            while counter <= max_retries:
-                try:
-                    os.rename(image_path, new_image_path)
-                    logger.info("Renamed: %s -> %s", image, new_image_name)
-                    break
-                except FileExistsError:
-                    # If the new filename already exists, add a unique identifier and try again
-                    new_image_name = f'{extracted_text}_{counter}{extension}'
-                    new_image_path = os.path.join(folder_path, new_image_name)
-                    counter += 1
-            else:
-                logger.info("Failed to rename: %s", image)
-        else:
+        if not extracted_text:
             logger.info("No text recognized: %s. Image name remains the same.", image)
+            continue
+
+        new_image_name = f'{extracted_text}{extension}'
+        new_image_path = os.path.join(folder_path, new_image_name)
+
+        # Rename the file and handle FileExistsError
+        max_retries = 100
+        counter = 1
+        for attempt in range(max_retries):
+            try:
+                os.rename(image_path, new_image_path)
+                logger.info("Renamed: %s -> %s", image, new_image_name)
+                break
+            except FileExistsError:
+                # If the new filename already exists, add a unique identifier and try again
+                new_image_name = f'{extracted_text}_{counter}{extension}'
+                new_image_path = os.path.join(folder_path, new_image_name)
+                counter += 1
+        else:
+            logger.info("Failed to rename: %s", image)
 
     logger.info("Command finished at %s and renamed %s images.", datetime.now(), len(image_files))
 
-
-main.add_command(rename_images)
 
 if __name__ == '__main__':
     main()
