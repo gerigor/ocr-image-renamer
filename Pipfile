@@ -7,6 +7,10 @@ name = "pypi"
 click = "*"
 easyocr = "*"
 pillow = "==9.5.0"
+bandit = "*"
+black = "*"
+isort = "*"
+pylint = "*"
 
 [dev-packages]
 pytest = "*"
