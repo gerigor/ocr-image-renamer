@@ -17,7 +17,7 @@ def setup_logging(name: str):
 
 
 def extract_text_from_img(reader, image_path) -> str | None:
-    """ Extract text from image and returns three words from the biggest areas on the image. """
+    """ Extract text from image and return three words from the biggest areas on the image. """
 
     results = reader.readtext(image_path)
 

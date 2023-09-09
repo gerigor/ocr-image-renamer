@@ -1,7 +1,7 @@
 # OCR Image Renamer 
 It is a command line script that renames all images in a given folder to the extracted text from each image using EasyOCR library.
 
-## Installation
+## Installation:
 Pipenv environment:
 ```
 pipenv install
@@ -16,7 +16,7 @@ pip install -r requirements.txt
 ```
 python3 ocr.py rename_images --dir "C:/Users/images/" --lang en
 ```
-**will rename all images in C:/Users/images/ folder with extracted english text**
+**Renames all images in C:/Users/images/ folder with extracted english text**
 
 ## Examples:
 ![Result](docs%2Fimages%2Fresult.png)
