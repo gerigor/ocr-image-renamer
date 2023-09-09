@@ -37,6 +37,10 @@ python3 -m isort .
 python3 -m bandit .
 pylint --recursive=y services tests ocr.py    
 ```
+- Create requirements.txt from pipenv
+```
+pipenv requirements > requirements.txt
+```
 
 ## Roadmap:
 - Fix issue with non-ascii symbols in file name when passing it to readtext method 
