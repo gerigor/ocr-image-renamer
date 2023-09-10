@@ -43,6 +43,5 @@ pipenv requirements > requirements.txt
 ```
 
 ## Roadmap:
-- Fix issue with non-ascii symbols in file name when passing it to readtext method 
-- Add black, isort, pylint, pre-commit
+- Fix issue with non-ascii symbols in file name when passing it to readtext method (working...)
 - Add setup.py
